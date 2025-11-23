@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Kelas 6 Semester 2</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+        
+        .option:hover {
+            background-color: #e9ecef;
+            border-color: #6a11cb;
+        }
+        
+        .option.selected {
+            background-color: #6a11cb;
+            color: white;
+            border-color: #6a11cb;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+        }
+        
+        button:hover {
+            background-color: #5a0db8;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background-color: #b8b8b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #6a11cb;
+            margin: 20px 0;
+        }
+        
+        .feedback {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #6a11cb;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-number {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kuis Interaktif Kelas 6</h1>
+            <p class="subtitle">Semester 2 - Uji Pengetahuanmu!</p>
+        </header>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div id="quiz-container">
+            <!-- Konten kuis akan diisi oleh JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Data kuis
+        const quizData = [
+            {
+                question: "Berapakah hasil dari 3/4 + 1/2?",
+                options: ["5/4", "1", "4/6", "3/2"],
+                correct: 0
+            },
+            {
+                question: "Apa nama bangun ruang yang memiliki 6 sisi yang sama panjang?",
+                options: ["Balok", "Kubus", "Prisma", "Limas"],
+                correct: 1
+            },
+            {
+                question: "Ibu membeli 2,5 kg gula. Jika 1 kg gula harganya Rp 12.000, berapa total yang harus dibayar ibu?",
+                options: ["Rp 24.000", "Rp 30.000", "Rp 28.000", "Rp 36.000"],
+                correct: 1
+            },
+            {
+                question: "Apa ibukota provinsi Jawa Barat?",
+                options: ["Semarang", "Surabaya", "Bandung", "Jakarta"],
+                correct: 2
+            },
+            {
+                question: "Proses fotosintesis pada tumbuhan menghasilkan...",
+                options: ["Karbon dioksida", "Oksigen", "Nitrogen", "Hidrogen"],
+                correct: 1
+            },
+            {
+                question: "Siapa penemu bola lampu?",
+                options: ["Alexander Graham Bell", "Thomas Alva Edison", "Albert Einstein", "Isaac Newton"],
+                correct: 1
+            },
+            {
+                question: "Berapakah KPK dari 12 dan 18?",
+                options: ["24", "36", "48", "72"],
+                correct: 1
+            },
+            {
+                question: "Apa nama planet terbesar di tata surya kita?",
+                options: ["Bumi", "Mars", "Jupiter", "Saturnus"],
+                correct: 2
+            },
+            {
+                question: "Kalimat yang mengandung perintah disebut...",
+                options: ["Kalimat berita", "Kalimat tanya", "Kalimat perintah", "Kalimat seru"],
+                correct: 2
+            },
+            {
+                question: "Berapakah hasil dari 15²?",
+                options: ["30", "125", "225", "250"],
+                correct: 2
+            }
+        ];
+
+        // Variabel state kuis
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        // Elemen DOM
+        const quizContainer = document.getElementById('quiz-container');
+        const progressBar = document.getElementById('progress');
+
+        // Fungsi untuk menampilkan pertanyaan
+        function showQuestion() {
+            const question = quizData[currentQuestion];
+            const progressPercentage = ((currentQuestion + 1) / quizData.length) * 100;
+            
+            progressBar.style.width = `${progressPercentage}%`;
+            
+            let optionsHTML = '';
+            question.options.forEach((option, index) => {
+                optionsHTML += `
+                    <div class="option" data-index="${index}">
+                        ${option}
+                    </div>
+                `;
+            });
+            
+            quizContainer.innerHTML = `
+                <div class="question-number">Pertanyaan ${currentQuestion + 1} dari ${quizData.length}</div>
+                <div class="card">
+                    <div class="question">${question.question}</div>
+                    <div class="options">
+                        ${optionsHTML}
+                    </div>
+                    <div class="navigation">
+                        <button id="prev-btn" ${currentQuestion === 0 ? 'disabled' : ''}>Sebelumnya</button>
+                        <button id="next-btn">${currentQuestion === quizData.length - 1 ? 'Selesai' : 'Selanjutnya'}</button>
+                    </div>
+                </div>
+            `;
+            
+            // Tambahkan event listener untuk opsi
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Hapus seleksi sebelumnya
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Tandai opsi yang dipilih
+                    this.classList.add('selected');
+                    selectedOption = parseInt(this.getAttribute('data-index'));
+                });
+            });
+            
+            // Event listener untuk tombol navigasi
+            document.getElementById('prev-btn').addEventListener('click', prevQuestion);
+            document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        }
+
+        // Fungsi untuk pertanyaan sebelumnya
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        // Fungsi untuk pertanyaan selanjutnya
+        function nextQuestion() {
+            if (selectedOption !== null) {
+                // Periksa jawaban
+                if (selectedOption === quizData[currentQuestion].correct) {
+                    score++;
+                }
+                
+                // Reset pilihan
+                selectedOption = null;
+                
+                // Lanjut ke pertanyaan berikutnya atau tampilkan hasil
+                if (currentQuestion < quizData.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            } else {
+                alert('Silakan pilih jawaban terlebih dahulu!');
+            }
+        }
+
+        // Fungsi untuk menampilkan hasil
+        function showResult() {
+            const percentage = (score / quizData.length) * 100;
+            let feedback = '';
+            
+            if (percentage >= 80) {
+                feedback = 'Luar biasa! Kamu sangat menguasai materi.';
+            } else if (percentage >= 60) {
+                feedback = 'Bagus! Kamu sudah memahami materi dengan baik.';
+            } else if (percentage >= 40) {
+                feedback = 'Cukup baik. Perlu belajar lebih giat lagi.';
+            } else {
+                feedback = 'Jangan menyerah! Terus belajar dan berlatih.';
+            }
+            
+            quizContainer.innerHTML = `
+                <div class="card result">
+                    <h2>Hasil Kuis</h2>
+                    <div class="score">${score}/${quizData.length}</div>
+                    <div class="feedback">${feedback}</div>
+                    <button id="restart-btn">Ulangi Kuis</button>
+                </div>
+            `;
+            
+            document.getElementById('restart-btn').addEventListener('click', function() {
+                currentQuestion = 0;
+                score = 0;
+                selectedOption = null;
+                showQuestion();
+            });
+        }
+
+        // Mulai kuis
+        showQuestion();
+    </script>
+</body>
+</html>
